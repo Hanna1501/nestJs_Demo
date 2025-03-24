@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -35,13 +35,13 @@ export class UsersController {
     // }
 
     @Post()
-    create(@Body() createUserDto: CreateUserDto){    // read body of the request
+    create(@Body(ValidationPipe) createUserDto: CreateUserDto){    // read body of the request
         // return user
         return this.usersService.create(createUserDto)   //+ unary => convert to number
     }
 
     @Put(':id')   // GET /users/:id
-    update(@Param('id') id: string, @Body() userUpdate: UpdateUserDto){
+    update(@Param('id') id: string, @Body(ValidationPipe) userUpdate: UpdateUserDto){
         return {id, ...userUpdate}  //return id value
     }
 
