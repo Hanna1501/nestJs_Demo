@@ -1,11 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
+    constructor(private readonly usersService: UsersService){}
 
     @Get()   // GET /users
     findAll(){
-        return []
+        // return []
+        return this.usersService.findAll()
     }
 
     // @Get()   // GET /users?role=value
@@ -14,9 +17,15 @@ export class UsersController {
     // }
 
     @Get(':id')   // GET /users/:id
-    findOne(@Param('id') id: string){
-        return {id}  //return id value
+    findOne(@Param('id', ParseIntPipe) id: number){
+        // return {id}  //return id value
+        return this.usersService.findOne(id)   //+ unary => convert to number
     }
+
+    // findOne(@Param('id') id: string){
+    //     // return {id}  //return id value
+    //     return this.usersService.findOne(+id)   //+ unary => convert to number
+    // }
 
     // @Get('interns')   // GET /users/:id
     // findAllInterns(){
@@ -25,7 +34,8 @@ export class UsersController {
 
     @Post()
     create(@Body() user: {name: string, email: string, role: 'Admin' | 'user'}){    // read body of the request
-        return user
+        // return user
+        return this.usersService.create(user)   //+ unary => convert to number
     }
 
     @Put(':id')   // GET /users/:id
