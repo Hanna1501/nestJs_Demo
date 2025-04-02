@@ -1,11 +1,16 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Document } from "mongoose";
+
+// export type UsersDocument = HydratedDocument<Users>;
+
+export type UsersDocument = Users & Document; // Ensure it extends Document
 
 @Schema()
 export class Users {
-  @Prop({unique: true})
+  @Prop({unique: true, required: true})
   name: string;
 
-  @Prop({required: true})
+  @Prop({unique: true, required: true})
   email: string;
 
   @Prop({required: true})
