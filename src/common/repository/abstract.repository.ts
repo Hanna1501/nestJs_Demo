@@ -1,6 +1,6 @@
-import { Model, FilterQuery } from 'mongoose';
+import { Model, FilterQuery, HydratedDocument, Types } from 'mongoose';
 
-export abstract class AbstractRepository<T extends Document> {
+export abstract class AbstractRepository<T extends HydratedDocument<any> & { _id: Types.ObjectId }> {
   constructor(protected readonly model: Model<T>) {}
 
   async findAll(): Promise<T[]> {
@@ -13,7 +13,7 @@ export abstract class AbstractRepository<T extends Document> {
 
   async create(createDto: any): Promise<T> {
     const createdEntity = new this.model(createDto);
-    return createdEntity.save();
+    return createdEntity.save() as Promise<T>;
   }
 
   async update(id: string, updateDto: any): Promise<T | null> {

@@ -1,9 +1,9 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 
 // export type UsersDocument = HydratedDocument<Users>;
 
-export type UsersDocument = Users & Document; // Ensure it extends Document
+export type UsersDocument = Users & Document & { _id: Types.ObjectId }; // Ensure it extends Document
 
 @Schema()
 export class Users {
