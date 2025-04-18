@@ -1,4 +1,5 @@
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { Types } from "mongoose";
 
 export class CreateOrdersDto {
     @IsString()
@@ -8,5 +9,6 @@ export class CreateOrdersDto {
     @IsNumber()
     price: number;
 
-    userId: string;
+    @IsNotEmpty()
+    userId: Types.ObjectId;
 }
