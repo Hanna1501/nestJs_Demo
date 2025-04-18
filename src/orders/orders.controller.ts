@@ -1,27 +1,16 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { CreateOrdersDto } from './dto/create-order.dto';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { Types } from 'mongoose';
+import { Orders } from 'src/schemas/Orders.schema';
+import { Users } from 'src/schemas/Users.schema';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) { }
 
   @Post()
-  async createOrder(@Body() body: { userData: CreateUserDto; orderData: CreateOrdersDto }) {
-    return this.ordersService.createOrderWithTransaction(body.userData, body.orderData);
-  }
-
-  @Get()
-  async getPosts(
-    // @Query('page') page: number,
-    @Query('limit') limit: number,
-    @Query('lastId') lastId: string,
-    @Query('startsWith') startsWith: string,
-  ) {
-    const parsedLimit = Math.min(Number(limit) || 10, 50);
-    // const safePage = Math.max(Number(page) || 1, 1);
-    // return this.ordersService.getOrders(safePage, parsedLimit, startsWith);
-    return this.ordersService.getOrders(parsedLimit, lastId, startsWith);
+  async createOrder(@Body() body: {userData:Partial<Users>; orderData: Partial<Orders>}) {
+    return this.ordersService.createOrder(body.userData, body.orderData);
   }
 }
