@@ -4,6 +4,7 @@ import { ClientSession, Model } from "mongoose";
 import { Users, UsersDocument } from "src/schemas/Users.schema";
 import { AbstractRepository } from "src/common/repository/abstract.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersRepository extends AbstractRepository<UsersDocument> {
@@ -11,41 +12,11 @@ export class UsersRepository extends AbstractRepository<UsersDocument> {
         super(usersModel);
     }
     async create(user: CreateUserDto, session?: ClientSession): Promise<UsersDocument> {
+        const hashedPassword = await bcrypt.hash(user.password, 10);    //salt rounds 10
+        const userData = { ...user, password: hashedPassword };
         if (session) {
-            return new this.usersModel(user).save({ session });
+            return new this.usersModel(userData).save({ session });
         }
-        return new this.usersModel(user).save();
+        return new this.usersModel(userData).save();
     }
-    //   async findAll(): Promise<Users[]> {
-    //     return await this.usersModel.find().exec();
-    //   }
-
-    //   async findOne(id: string): Promise<Users> {
-    //     const user = await this.usersModel.findById(id).exec();
-    //     if (!user) {
-    //       throw new NotFoundException(`User not found`);
-    //     }
-    //     return user;
-    //   }
-
-    //   async create(createUserDto: CreateUserDto): Promise<Users> {
-    //     const newUser = new this.usersModel(createUserDto);
-    //     return await newUser.save();
-    //   }
-
-    //   async update(id: string, updateUserDto: UpdateUserDto): Promise<Users> {
-    //     const updatedUser = await this.usersModel.findByIdAndUpdate(id, updateUserDto, { new: true }).exec();
-    //     if (!updatedUser) {
-    //       throw new NotFoundException(`User not found`);
-    //     }
-    //     return updatedUser;
-    //   }
-
-    //   async delete(id: string): Promise<{ message: string }> {
-    //     const deletedUser = await this.usersModel.findByIdAndDelete(id).exec();
-    //     if (!deletedUser) {
-    //       throw new NotFoundException(`User not found`);
-    //     }
-    //     return { message: 'User deleted successfully' };
-    //   }
 }

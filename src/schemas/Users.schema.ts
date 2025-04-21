@@ -7,17 +7,20 @@ export type UsersDocument = Users & Document & { _id: Types.ObjectId }; // Ensur
 
 @Schema()
 export class Users {
-  @Prop({unique: true, required: true})
+  @Prop({ unique: true, required: true })
   name: string;
 
-  @Prop({unique: true, required: true})
+  @Prop({ unique: true, required: true })
   email: string;
 
-  @Prop({required: true})
+  @Prop({ required: true })
   mobile: string;
 
   @Prop({ enum: ['user', 'Admin'] })
   role: 'Admin' | 'user';
+
+  @Prop({ required: true })
+  password: string;
 }
 
 export const UsersSchema = SchemaFactory.createForClass(Users);

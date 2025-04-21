@@ -7,7 +7,6 @@ import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
-    // constructor(@InjectModel(Users.name) private usersModel: Model<Users>) {}
     constructor(private readonly usersRepository: UsersRepository) { }
 
     findAll() {
@@ -20,5 +19,9 @@ export class UsersService {
 
     create(createUserDto: CreateUserDto) {
         return this.usersRepository.create(createUserDto)
+    }
+
+    async findByEmail(email: string) {
+        return this.usersRepository.findOne({ email });
     }
 }

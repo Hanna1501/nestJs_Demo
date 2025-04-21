@@ -14,4 +14,7 @@ export class CreateUserDto {
         message: 'Valid role required'
     })
     role: 'Admin' | 'user';
+
+    @IsNotEmpty()
+    password: string;
 }
