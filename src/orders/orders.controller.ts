@@ -3,6 +3,7 @@ import { OrdersService } from './orders.service';
 import { CreateOrdersDto } from './dto/create-order.dto';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('orders')
 export class OrdersController {
@@ -13,7 +14,8 @@ export class OrdersController {
     return this.ordersService.createOrderWithTransaction(body.userData, body.orderData);
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get()
   async getPosts(
     @Query('limit') limit: number,
